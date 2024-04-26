@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class Chatbot extends StatefulWidget {
   const Chatbot({super.key});
-
+  static String id = 'chatPage';
   @override
   State<Chatbot> createState() => _ChatbotState();
 }
@@ -18,7 +18,7 @@ class _ChatbotState extends State<Chatbot> {
   );
   ChatUser bot = ChatUser(
     id: '2',
-    firstName: 'Gemini',
+    firstName: 'mmoh',
   );
 
   List<ChatMessage> allMessages = [];
