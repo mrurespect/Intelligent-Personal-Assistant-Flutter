@@ -5,6 +5,8 @@ import 'package:chatpotgemini/chat_message_widget.dart';
 import 'package:chatpotgemini/message.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class chatScreen extends StatefulWidget {
   static String id = 'chatscreen';
@@ -60,6 +62,7 @@ class _chatScreenState extends State<chatScreen> {
   void initState() {
     super.initState();
     isloading = false;
+    speechToText = SpeechToText();
   }
 
   void _scrollDown() {
@@ -69,6 +72,11 @@ class _chatScreenState extends State<chatScreen> {
       curve: Curves.easeOut,
     );
   }
+
+  late SpeechToText speechToText;
+
+  var text = "";
+  var isListening = false;
 
   @override
   Widget build(BuildContext context) {
@@ -153,44 +161,131 @@ class _chatScreenState extends State<chatScreen> {
                     visible: !isloading,
                     child: Container(
                       color: Color(0xFF444654),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.send_rounded,
-                          color: Color.fromRGBO(142, 142, 160, 1),
-                        ),
-                        onPressed: () async {
-                          setState(() {
-                            _messages.add(
-                              ChatMessage(
-                                text: _textController.text,
-                                sender: Sender.user,
-                              ),
-                            );
-                            isloading = true;
-                          });
-                          var input = _textController.text;
-                          _textController.clear();
-                          Future.delayed(
-                            Duration(milliseconds: 50),
-                          ).then((_) => _scrollDown());
-                          generateResponse(input).then(
-                            (value) => {
-                              setState(
-                                () {
-                                  isloading = false;
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              Icons.send_rounded,
+                              color: Color.fromRGBO(142, 142, 160, 1),
+                            ),
+                            onPressed: () async {
+                              setState(() {
+                                _messages.add(
+                                  ChatMessage(
+                                    text: _textController.text,
+                                    sender: Sender.user,
+                                  ),
+                                );
+                                isloading = true;
+                              });
+                              var input = _textController.text;
+                              _textController.clear();
+                              Future.delayed(
+                                Duration(milliseconds: 50),
+                              ).then((_) => _scrollDown());
+                              generateResponse(input).then(
+                                (value) => {
+                                  setState(
+                                    () {
+                                      isloading = false;
+                                      _messages.add(
+                                        ChatMessage(
+                                          text: value,
+                                          sender: Sender.bot,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                },
+                              );
+                              _textController.clear();
+                              Future.delayed(
+                                Duration(milliseconds: 50),
+                              ).then((_) => _scrollDown());
+                            },
+                          ),
+                          AvatarGlow(
+                            animate: isListening,
+                            duration: Duration(milliseconds: 2000),
+                            repeat: true,
+                            glowColor: Colors.blue,
+                            child: GestureDetector(
+                              onTapDown: (details) async {
+                                if (!isListening) {
+                                  bool available =
+                                      await speechToText.initialize();
+                                  if (available) {
+                                    setState(() {
+                                      isListening = true;
+                                      _textController.text = "";
+                                    });
+                                    speechToText.listen(
+                                      onResult: (result) {
+                                        setState(() {
+                                          _textController.text =
+                                              result.recognizedWords;
+                                        });
+                                      },
+                                      cancelOnError: true,
+                                      onDevice: () async {
+                                        setState(() {
+                                          isListening = false;
+                                          _textController.text = "";
+                                        });
+                                      },
+                                    );
+                                  } else {
+                                    print("Speech recognition not available");
+                                  }
+                                }
+                              },
+                              onTapUp: (details) async {
+                                setState(() {
+                                  isListening = false;
                                   _messages.add(
                                     ChatMessage(
-                                        text: value, sender: Sender.bot),
+                                      text: _textController.text,
+                                      sender: Sender.user,
+                                    ),
                                   );
-                                },
+                                  isloading = true;
+                                });
+                                var input = _textController.text;
+                                //_textController.clear();
+                                Future.delayed(
+                                  Duration(milliseconds: 50),
+                                ).then((_) => _scrollDown());
+                                generateResponse(input).then(
+                                  (value) => {
+                                    setState(
+                                      () {
+                                        isloading = false;
+                                        _messages.add(
+                                          ChatMessage(
+                                            text: value,
+                                            sender: Sender.bot,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  },
+                                );
+                                _textController.clear();
+                                Future.delayed(
+                                  Duration(milliseconds: 50),
+                                ).then((_) => _scrollDown());
+                                speechToText.stop();
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.blue,
+                                child: Icon(
+                                  isListening ? Icons.mic : Icons.mic_none,
+                                  color: Colors.white,
+                                ),
                               ),
-                            },
-                          );
-                          _textController.clear();
-                          Future.delayed(
-                            Duration(milliseconds: 50),
-                          ).then((_) => _scrollDown());
-                        },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
