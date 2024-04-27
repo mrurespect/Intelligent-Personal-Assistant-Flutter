@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class chatScreen extends StatefulWidget {
+  static String id = 'chatscreen';
   const chatScreen({super.key});
 
   @override
