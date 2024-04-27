@@ -4,6 +4,7 @@ import 'package:chatpotgemini/botMessage.dart';
 import 'package:chatpotgemini/chat_message_widget.dart';
 import 'package:chatpotgemini/message.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -73,6 +74,7 @@ class _chatScreenState extends State<chatScreen> {
     );
   }
 
+  FlutterTts flutterTts = FlutterTts();
   late SpeechToText speechToText;
 
   var text = "";
@@ -239,6 +241,45 @@ class _chatScreenState extends State<chatScreen> {
                                   }
                                 }
                               },
+                              /*onTapUp: (details) async {
+                                    setState(() {
+                                      isListening = false;
+                                      _messages.add(
+                                        ChatMessage(
+                                          text: _textController.text,
+                                          sender: Sender.user,
+                                        ),
+                                      );
+                                      isloading = true;
+                                    });
+                                    var input = _textController.text;
+                                    //_textController.clear();
+                                    Future.delayed(
+                                      Duration(milliseconds: 50),
+                                    ).then((_) => _scrollDown());
+                                    generateResponse(input).then(
+                                      (value) => {
+                                        setState(
+                                          () {
+                                            isloading = false;
+                                            flutterTts.speak(value);
+                                            _messages.add(
+                                              ChatMessage(
+                                                text: value,
+                                                sender: Sender.bot,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      },
+                                    );
+                                    _textController.clear();
+                                    Future.delayed(
+                                      Duration(milliseconds: 50),
+                                    ).then((_) => _scrollDown());
+                                    speechToText.stop();
+                                  },*/
+
                               onTapUp: (details) async {
                                 setState(() {
                                   isListening = false;
@@ -251,29 +292,23 @@ class _chatScreenState extends State<chatScreen> {
                                   isloading = true;
                                 });
                                 var input = _textController.text;
-                                //_textController.clear();
-                                Future.delayed(
-                                  Duration(milliseconds: 50),
-                                ).then((_) => _scrollDown());
                                 generateResponse(input).then(
-                                  (value) => {
-                                    setState(
-                                      () {
-                                        isloading = false;
-                                        _messages.add(
-                                          ChatMessage(
-                                            text: value,
-                                            sender: Sender.bot,
-                                          ),
-                                        );
-                                      },
-                                    ),
+                                  (value) async {
+                                    setState(() {
+                                      isloading = false;
+                                      _messages.add(
+                                        ChatMessage(
+                                          text: value,
+                                          sender: Sender.bot,
+                                        ),
+                                      );
+                                    });
+                                    flutterTts.speak(
+                                        value); // Lecture de la réponse dès qu'elle est générée
+                                    _textController.clear();
+                                    _scrollDown();
                                   },
                                 );
-                                _textController.clear();
-                                Future.delayed(
-                                  Duration(milliseconds: 50),
-                                ).then((_) => _scrollDown());
                                 speechToText.stop();
                               },
                               child: CircleAvatar(
