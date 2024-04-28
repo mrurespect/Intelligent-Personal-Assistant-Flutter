@@ -1,7 +1,7 @@
+import 'package:chatpotgemini/chat_screen.dart';
 import 'package:chatpotgemini/components/main_button.dart';
 import 'package:chatpotgemini/helpers/font_size.dart';
 import 'package:chatpotgemini/helpers/theme_colors.dart';
-import 'package:chatpotgemini/mybot.dart';
 import 'package:chatpotgemini/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 
@@ -147,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                         textColor: ThemeColors.scaffoldBgColor,
                         iconPath: 'images/google.png',
                         onTap: () {
-                          Navigator.pushNamed(context, Chatbot.id);
+                          Navigator.pushNamed(context, chatScreen.id);
                         },
                       ),
                     ],
