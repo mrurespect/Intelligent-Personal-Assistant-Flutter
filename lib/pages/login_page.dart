@@ -27,12 +27,20 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Let's get you in!",
-                  style: TextStyle(
+                Container(
+                  padding:
+                      EdgeInsets.only(right: 50, top: 6, bottom: 6, left: 6),
+                  decoration: BoxDecoration(
                     color: ThemeColors.whiteTextColor,
-                    fontSize: FontSize.xxLarge,
-                    fontWeight: FontWeight.w600,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    "Let's get you in!",
+                    style: TextStyle(
+                      color: ThemeColors.scaffoldBgColor,
+                      fontSize: FontSize.xxLarge,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 Padding(
@@ -46,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 70),
+                SizedBox(height: 75),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -125,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 70),
+                      SizedBox(height: 60),
                       MainButton(
                         text: 'Login',
                         onTap: () {
