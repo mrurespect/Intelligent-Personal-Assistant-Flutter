@@ -2,7 +2,10 @@ import 'package:chatpotgemini/components/main_button.dart';
 import 'package:chatpotgemini/helpers/font_size.dart';
 import 'package:chatpotgemini/helpers/theme_colors.dart';
 import 'package:chatpotgemini/mybot.dart';
+import 'package:chatpotgemini/chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -179,9 +182,50 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(height: 70),
                       MainButton(
                         text: 'Sign Up',
-                        onTap: () {
-                          _formKey.currentState!.validate();
-                          Navigator.pushNamed(context, Chatbot.id);
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            String username = _nameController.text;
+                            String password = _passwordController.text;
+                            String name = _nameController.text;
+                            String lastName = _nameController.text;
+                            String email = _emailController.text;
+
+                            // Build the login request URL (replace with your actual API endpoint)
+                            Uri url = Uri.parse('http://192.168.43.201:8080/register');
+                            // Prepare the request body
+                            Map<String, String> body = {
+                              'username': username,
+                              'password': password,
+                              'name': name,
+                              'lastName': lastName,
+                              'email': email,
+                            };
+
+                            // Encode the body data as JSON
+                            String jsonBody = jsonEncode(body);
+
+                            try {
+                              final response = await http.post(
+                                url,
+                                body: jsonBody,
+                                headers: {"Content-Type": "application/json"},
+                              );
+
+                              if (response.statusCode == 200) {
+                                // Login successful, handle the token
+                                // (store securely and use for authorized requests)
+                                print('Registration successful!');
+                                Navigator.pushNamed(context, chatScreen.id);
+                              } else {
+                                // Handle login error
+                                print('Registration failed: ${response.body}');
+                                // Show error message to the user
+                              }
+                            } catch (error) {
+                              print('Error during login: $error');
+                              // Show error message to the user
+                            }
+                          }
                         },
                       ),
                     ],
