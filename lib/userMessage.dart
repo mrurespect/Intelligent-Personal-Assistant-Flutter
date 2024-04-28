@@ -1,11 +1,11 @@
 import 'package:chatpotgemini/message.dart';
 import 'package:flutter/material.dart';
 
-class BotMessage extends StatelessWidget {
+class UserMessage extends StatelessWidget {
   final String text;
   final Sender sender;
 
-  const BotMessage({
+  const UserMessage({
     super.key,
     required this.text,
     required this.sender,
@@ -18,28 +18,19 @@ class BotMessage extends StatelessWidget {
         color: Color.fromRGBO(233, 224, 169, 0.969),
       ),
       child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, right: 50),
+        padding: const EdgeInsets.only(top: 20.0, left: 50),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: CircleAvatar(
-                child: Image.asset('images/bot.png'),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
             Flexible(
               fit: FlexFit.loose,
               child: Container(
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(2, 2, 45, 0.957),
+                    color: Color.fromRGBO(10, 129, 139, 0.722),
                     borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(16),
-                      topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
+                      topLeft: Radius.circular(16),
+                      bottomLeft: Radius.circular(16),
                     )),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -54,6 +45,15 @@ class BotMessage extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: CircleAvatar(
+                backgroundImage: AssetImage('images/user.png'),
               ),
             ),
           ],
