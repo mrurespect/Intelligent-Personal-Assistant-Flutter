@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:chatpotgemini/botMessage.dart';
 import 'package:chatpotgemini/chat_message_widget.dart';
 import 'package:chatpotgemini/message.dart';
+import 'package:chatpotgemini/userMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
@@ -84,10 +85,10 @@ class _chatScreenState extends State<chatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.purple[600],
+        backgroundColor: Color.fromRGBO(2, 2, 45, 0.957),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(100.0),
+            bottomRight: Radius.circular(60.0),
           ),
         ),
         leading: IconButton(
@@ -106,7 +107,7 @@ class _chatScreenState extends State<chatScreen> {
           ),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Color.fromRGBO(233, 224, 169, 0.969),
       body: SafeArea(
         child: Column(
           children: [
@@ -116,13 +117,13 @@ class _chatScreenState extends State<chatScreen> {
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   var message = _messages[index];
-                  if (message.sender == Sender.user) {
+                  if (message.sender == Sender.bot) {
                     return BotMessage(
                       text: message.text,
                       sender: message.sender,
                     );
                   } else {
-                    return ChatMessageWidget(
+                    return UserMessage(
                       text: message.text,
                       sender: message.sender,
                     );
@@ -149,7 +150,7 @@ class _chatScreenState extends State<chatScreen> {
                       style: TextStyle(color: Colors.white),
                       controller: _textController,
                       decoration: InputDecoration(
-                        fillColor: Color(0xFF444654),
+                        fillColor: Color.fromRGBO(2, 2, 45, 0.957),
                         filled: true,
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -162,13 +163,14 @@ class _chatScreenState extends State<chatScreen> {
                   Visibility(
                     visible: !isloading,
                     child: Container(
-                      color: Color(0xFF444654),
+                      color: Color.fromRGBO(2, 2, 45, 0.957),
                       child: Row(
                         children: [
                           IconButton(
                             icon: Icon(
                               Icons.send_rounded,
-                              color: Color.fromRGBO(142, 142, 160, 1),
+                              color: Color.fromRGBO(10, 129, 139, 0.722),
+                              size: 32,
                             ),
                             onPressed: () async {
                               setState(() {
@@ -210,7 +212,7 @@ class _chatScreenState extends State<chatScreen> {
                             animate: isListening,
                             duration: Duration(milliseconds: 2000),
                             repeat: true,
-                            glowColor: Colors.blue,
+                            glowColor: Color.fromRGBO(10, 129, 139, 0.722),
                             child: GestureDetector(
                               onTapDown: (details) async {
                                 if (!isListening) {
@@ -241,45 +243,6 @@ class _chatScreenState extends State<chatScreen> {
                                   }
                                 }
                               },
-                              /*onTapUp: (details) async {
-                                    setState(() {
-                                      isListening = false;
-                                      _messages.add(
-                                        ChatMessage(
-                                          text: _textController.text,
-                                          sender: Sender.user,
-                                        ),
-                                      );
-                                      isloading = true;
-                                    });
-                                    var input = _textController.text;
-                                    //_textController.clear();
-                                    Future.delayed(
-                                      Duration(milliseconds: 50),
-                                    ).then((_) => _scrollDown());
-                                    generateResponse(input).then(
-                                      (value) => {
-                                        setState(
-                                          () {
-                                            isloading = false;
-                                            flutterTts.speak(value);
-                                            _messages.add(
-                                              ChatMessage(
-                                                text: value,
-                                                sender: Sender.bot,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      },
-                                    );
-                                    _textController.clear();
-                                    Future.delayed(
-                                      Duration(milliseconds: 50),
-                                    ).then((_) => _scrollDown());
-                                    speechToText.stop();
-                                  },*/
-
                               onTapUp: (details) async {
                                 setState(() {
                                   isListening = false;
@@ -303,8 +266,7 @@ class _chatScreenState extends State<chatScreen> {
                                         ),
                                       );
                                     });
-                                    flutterTts.speak(
-                                        value); // Lecture de la réponse dès qu'elle est générée
+                                    flutterTts.speak(value);
                                     _textController.clear();
                                     _scrollDown();
                                   },
@@ -312,7 +274,8 @@ class _chatScreenState extends State<chatScreen> {
                                 speechToText.stop();
                               },
                               child: CircleAvatar(
-                                backgroundColor: Colors.blue,
+                                backgroundColor:
+                                    Color.fromRGBO(10, 129, 139, 0.722),
                                 child: Icon(
                                   isListening ? Icons.mic : Icons.mic_none,
                                   color: Colors.white,
