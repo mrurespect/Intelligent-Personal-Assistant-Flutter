@@ -22,13 +22,13 @@ class MainButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 75,
+        height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor == null
               ? ThemeColors.primaryColor
               : backgroundColor,
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: Row(
