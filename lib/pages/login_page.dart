@@ -4,6 +4,8 @@ import 'package:chatpotgemini/helpers/font_size.dart';
 import 'package:chatpotgemini/helpers/theme_colors.dart';
 import 'package:chatpotgemini/pages/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,10 +15,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+
+
+
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,21 +69,20 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       ///Email Input Field
                       TextFormField(
-                        controller: _emailController,
+                        controller: _usernameController,
                         validator: (value) {
-                          if (_emailController.text.isEmpty) {
+                          if (_usernameController.text.isEmpty) {
                             return "This field can't be empty";
                           }
                         },
                         style: TextStyle(
                           color: ThemeColors.whiteTextColor,
                         ),
-                        keyboardType: TextInputType.emailAddress,
                         cursorColor: ThemeColors.primaryColor,
                         decoration: InputDecoration(
                           fillColor: ThemeColors.textFieldBgColor,
                           filled: true,
-                          hintText: "E-mail",
+                          hintText: "Username",
                           hintStyle: TextStyle(
                             color: ThemeColors.textFieldHintColor,
                             fontSize: FontSize.medium,
@@ -136,8 +143,48 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 60),
                       MainButton(
                         text: 'Login',
-                        onTap: () {
-                          _formKey.currentState!.validate();
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            String username = _usernameController.text;
+                            String password = _passwordController.text;
+
+                            // Build the login request URL (replace with your actual API endpoint)
+                            Uri url = Uri.parse('http://192.168.43.201:8080/login');
+
+                            // Prepare the request body
+                            Map<String, String> body = {'username': username, 'password': password};
+                            String jsonBody = jsonEncode(body);
+
+                            try {
+                               final response = await http.post(
+                                url,
+                                body: jsonBody,
+                                headers: {"Content-Type": "application/json"},
+                              );
+
+                              if (response.statusCode == 200) {
+                                Navigator.pushNamed(context, chatScreen.id);
+                                print('Login successful!');
+                              } else {
+                                // Handle login error
+                                print('Login failed: ${response.body}');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Username or password incorrect',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                );
+                                _usernameController.clear();
+                                _passwordController.clear();
+                                // Show error message to the user
+                              }
+                            } catch (error) {
+                              print('Error during login: $error');
+                              // Show error message to the user
+                            }
+                          }
                         },
                       ),
                       SizedBox(height: 16),

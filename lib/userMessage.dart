@@ -1,4 +1,4 @@
-import 'package:chatpotgemini/message.dart';
+import 'package:chatpotgemini/modele/message.dart';
 import 'package:flutter/material.dart';
 
 class UserMessage extends StatelessWidget {

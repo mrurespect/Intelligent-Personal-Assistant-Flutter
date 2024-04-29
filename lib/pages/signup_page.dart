@@ -17,7 +17,9 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -62,9 +64,9 @@ class _SignUpPageState extends State<SignUpPage> {
                     children: [
                       ///Name Input Field
                       TextFormField(
-                        controller: _nameController,
+                        controller: _firstNameController,
                         validator: (value) {
-                          if (_nameController.text.isEmpty) {
+                          if (_firstNameController.text.isEmpty) {
                             return "This field can't be empty";
                           }
                         },
@@ -76,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         decoration: InputDecoration(
                           fillColor: ThemeColors.textFieldBgColor,
                           filled: true,
-                          hintText: "Full name",
+                          hintText: "First name",
                           hintStyle: TextStyle(
                             color: ThemeColors.textFieldHintColor,
                             fontSize: FontSize.medium,
@@ -89,6 +91,66 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       SizedBox(height: 16),
+                      ///Lat Name Input Field
+                      TextFormField(
+                        controller: _lastNameController,
+                        validator: (value) {
+                          if (_lastNameController.text.isEmpty) {
+                            return "This field can't be empty";
+                          }
+                        },
+                        style: TextStyle(
+                          color: ThemeColors.whiteTextColor,
+                        ),
+                        keyboardType: TextInputType.name,
+                        cursorColor: ThemeColors.primaryColor,
+                        decoration: InputDecoration(
+                          fillColor: ThemeColors.textFieldBgColor,
+                          filled: true,
+                          hintText: "Last name",
+                          hintStyle: TextStyle(
+                            color: ThemeColors.textFieldHintColor,
+                            fontSize: FontSize.medium,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ///Name Input Field
+                      TextFormField(
+                        controller: _usernameController,
+                        validator: (value) {
+                          if (_usernameController.text.isEmpty) {
+                            return "This field can't be empty";
+                          }
+                        },
+                        style: TextStyle(
+                          color: ThemeColors.whiteTextColor,
+                        ),
+                        keyboardType: TextInputType.name,
+                        cursorColor: ThemeColors.primaryColor,
+                        decoration: InputDecoration(
+                          fillColor: ThemeColors.textFieldBgColor,
+                          filled: true,
+                          hintText: "Username",
+                          hintStyle: TextStyle(
+                            color: ThemeColors.textFieldHintColor,
+                            fontSize: FontSize.medium,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(Radius.circular(18)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+
+
 
                       ///E-mail Input Field
                       TextFormField(
@@ -184,10 +246,10 @@ class _SignUpPageState extends State<SignUpPage> {
                         text: 'Sign Up',
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                            String username = _nameController.text;
+                            String username = _usernameController.text;
                             String password = _passwordController.text;
-                            String name = _nameController.text;
-                            String lastName = _nameController.text;
+                            String name = _firstNameController.text;
+                            String lastName = _lastNameController.text;
                             String email = _emailController.text;
 
                             // Build the login request URL (replace with your actual API endpoint)
