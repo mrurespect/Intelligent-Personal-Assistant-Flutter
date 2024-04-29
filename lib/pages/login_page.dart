@@ -4,9 +4,12 @@ import 'package:chatpotgemini/helpers/font_size.dart';
 import 'package:chatpotgemini/helpers/theme_colors.dart';
 import 'package:chatpotgemini/mybot.dart';
 import 'package:chatpotgemini/pages/signup_page.dart';
+import 'package:chatpotgemini/service/global.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../service/AuthService.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -147,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
 
                             // Build the login request URL (replace with your actual API endpoint)
                             Uri url =
-                                Uri.parse('http://192.168.43.201:8080/login');
+                                Uri.parse('$baseURL/login');
 
                             // Prepare the request body
                             Map<String, String> body = {
@@ -164,6 +167,10 @@ class _LoginPageState extends State<LoginPage> {
                               );
 
                               if (response.statusCode == 200) {
+                                var responceBody = jsonDecode(response.body);
+                                var sessionId = responceBody["sessionId"];
+                                print('Session ID: $sessionId');
+                                AuthService().login(sessionId);
                                 Navigator.pushNamed(context, chatScreen.id);
                                 print('Login successful!');
                               } else {
