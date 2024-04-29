@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:chatpotgemini/botMessage.dart';
-import 'package:chatpotgemini/chat_message_widget.dart';
-import 'package:chatpotgemini/message.dart';
+import 'package:chatpotgemini/conversation_screen.dart';
+import 'package:chatpotgemini/modele/message.dart';
 import 'package:chatpotgemini/userMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -91,14 +91,14 @@ class _chatScreenState extends State<chatScreen> {
             bottomRight: Radius.circular(60.0),
           ),
         ),
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.menu,
-            size: 27,
-            color: Colors.white,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {},
+        //   icon: Icon(
+        //     Icons.menu,
+        //     size: 27,
+        //     color: Colors.white,
+        //   ),
+        // ),
         title: Text(
           'ChatBot',
           style: TextStyle(
@@ -106,6 +106,9 @@ class _chatScreenState extends State<chatScreen> {
             color: Colors.white,
           ),
         ),
+      ),
+      drawer: Drawer(
+        child: ConversationScreen(),
       ),
       backgroundColor: Color.fromRGBO(233, 224, 169, 0.969),
       body: SafeArea(
