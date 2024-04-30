@@ -1,11 +1,12 @@
 import 'package:chatpotgemini/modele/conversation.dart';
 import 'package:chatpotgemini/service/data_service.dart';
+import 'package:chatpotgemini/service/global.dart';
 import 'package:flutter/material.dart';
 
 class ConversationScreen extends StatefulWidget {
   const ConversationScreen({
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ConversationScreen> createState() => _ConversationScreenState();
@@ -17,11 +18,14 @@ class _ConversationScreenState extends State<ConversationScreen> {
   @override
   void initState() {
     super.initState();
-    _conversations = getConversation();
+    _conversations = _loadConversations();
   }
 
-  Future<List<Conversation>> getConversation() async {
-    return DataService.getConversation();
+  Future<List<Conversation>> _loadConversations() async {
+    // Obtenir les en-têtes API
+    Map<String, String> apiHeaders = await getApiHeaders();
+    // Appeler DataService avec les en-têtes API
+    return DataService.getConversation(apiHeaders);
   }
 
   @override
@@ -35,9 +39,6 @@ class _ConversationScreenState extends State<ConversationScreen> {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           return Scaffold(
-            appBar: AppBar(
-              title: Text('Conversations'),
-            ),
             body: ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {

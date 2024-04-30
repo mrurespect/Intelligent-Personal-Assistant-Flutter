@@ -6,10 +6,11 @@ class Conversation {
     required this.id,
     required this.name,
   });
-  factory Conversation.fromMap(Map<dynamic, dynamic> map) {
+
+  factory Conversation.fromMap(Map<String, dynamic> map) {
     return Conversation(
-      id: map['id'],
-      name: map['name'],
+      id: map['id'] ?? 0,
+      name: map['nom'] ?? '',
     );
   }
 }

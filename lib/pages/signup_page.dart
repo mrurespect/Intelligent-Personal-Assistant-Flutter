@@ -1,7 +1,6 @@
 import 'package:chatpotgemini/components/main_button.dart';
 import 'package:chatpotgemini/helpers/font_size.dart';
 import 'package:chatpotgemini/helpers/theme_colors.dart';
-import 'package:chatpotgemini/mybot.dart';
 import 'package:chatpotgemini/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -27,8 +26,8 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ThemeColors.scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: ThemeColors.scaffoldBgColor,
         elevation: 0,
       ),
       body: SafeArea(
@@ -38,12 +37,20 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "New here? Welcome!",
-                  style: TextStyle(
+                Container(
+                  padding:
+                      EdgeInsets.only(right: 50, top: 6, bottom: 6, left: 6),
+                  decoration: BoxDecoration(
                     color: ThemeColors.whiteTextColor,
-                    fontSize: FontSize.xxLarge,
-                    fontWeight: FontWeight.w600,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    "New here? Welcome!",
+                    style: TextStyle(
+                      color: ThemeColors.scaffoldBgColor,
+                      fontSize: FontSize.xxLarge,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
                 Padding(
@@ -57,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 70),
+                SizedBox(height: 80),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -241,7 +248,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 70),
+                      SizedBox(height: 40),
                       MainButton(
                         text: 'Sign Up',
                         onTap: () async {
@@ -253,6 +260,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             String email = _emailController.text;
 
                             // Build the login request URL (replace with your actual API endpoint)
+
                             Uri url =
                                 Uri.parse('http://10.0.2.2:8080/register');
                             // Prepare the request body
