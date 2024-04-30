@@ -91,6 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       SizedBox(height: 16),
+
                       ///Lat Name Input Field
                       TextFormField(
                         controller: _lastNameController,
@@ -120,6 +121,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       SizedBox(height: 16),
+
                       ///Name Input Field
                       TextFormField(
                         controller: _usernameController,
@@ -149,8 +151,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       SizedBox(height: 16),
-
-
 
                       ///E-mail Input Field
                       TextFormField(
@@ -253,7 +253,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             String email = _emailController.text;
 
                             // Build the login request URL (replace with your actual API endpoint)
-                            Uri url = Uri.parse('http://192.168.43.201:8080/register');
+                            Uri url =
+                                Uri.parse('http://10.0.2.2:8080/register');
                             // Prepare the request body
                             Map<String, String> body = {
                               'username': username,

@@ -33,6 +33,7 @@ dependencies:
   avatar_glow: ^3.0.1
   speech_to_text: ^6.6.1
   flutter_tts: ^3.0.0
+  provider: ^5.0.0
 
 
 

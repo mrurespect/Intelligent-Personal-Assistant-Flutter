@@ -6,6 +6,7 @@ import 'package:chatpotgemini/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,16 +16,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-
-
-
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,107 +55,60 @@ class _LoginPageState extends State<LoginPage> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      ///Email Input Field
                       TextFormField(
                         controller: _usernameController,
                         validator: (value) {
-                          if (_usernameController.text.isEmpty) {
-                            return "This field can't be empty";
+                          if (value == null || value.isEmpty) {
+                            return "Username is required";
                           }
+                          return null;
                         },
-                        style: TextStyle(
-                          color: ThemeColors.whiteTextColor,
-                        ),
-                        cursorColor: ThemeColors.primaryColor,
                         decoration: InputDecoration(
-                          fillColor: ThemeColors.textFieldBgColor,
-                          filled: true,
                           hintText: "Username",
-                          hintStyle: TextStyle(
-                            color: ThemeColors.textFieldHintColor,
-                            fontSize: FontSize.medium,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                          ),
                         ),
                       ),
                       SizedBox(height: 16),
-
-                      ///Password Input Field
                       TextFormField(
                         controller: _passwordController,
                         validator: (value) {
-                          if (_passwordController.text.isEmpty) {
-                            return "This field can't be empty";
+                          if (value == null || value.isEmpty) {
+                            return "Password is required";
                           }
+                          return null;
                         },
                         obscureText: true,
-                        style: TextStyle(
-                          color: ThemeColors.whiteTextColor,
-                        ),
-                        keyboardType: TextInputType.visiblePassword,
-                        cursorColor: ThemeColors.primaryColor,
                         decoration: InputDecoration(
-                          fillColor: ThemeColors.textFieldBgColor,
-                          filled: true,
                           hintText: "Password",
-                          hintStyle: TextStyle(
-                            color: ThemeColors.textFieldHintColor,
-                            fontSize: FontSize.medium,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.all(Radius.circular(18)),
-                          ),
                         ),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 12),
-                          child: Text(
-                            "Forgot password?",
-                            style: TextStyle(
-                              color: ThemeColors.greyTextColor,
-                              fontSize: FontSize.medium,
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 70),
+                      SizedBox(height: 16),
                       MainButton(
                         text: 'Login',
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
                             String username = _usernameController.text;
                             String password = _passwordController.text;
-
-                            // Build the login request URL (replace with your actual API endpoint)
-                            Uri url = Uri.parse('http://192.168.43.201:8080/login');
-
-                            // Prepare the request body
-                            Map<String, String> body = {'username': username, 'password': password};
+                            Uri url = Uri.parse('http://10.0.2.2:8080/login');
+                            Map<String, String> body = {
+                              'username': username,
+                              'password': password
+                            };
                             String jsonBody = jsonEncode(body);
 
                             try {
-                               final response = await http.post(
+                              final response = await http.post(
                                 url,
                                 body: jsonBody,
                                 headers: {"Content-Type": "application/json"},
                               );
 
                               if (response.statusCode == 200) {
+                                Provider.of<AuthProvider>(context,
+                                        listen: false)
+                                    .setUserLoggedIn(true);
                                 Navigator.pushNamed(context, chatScreen.id);
                                 print('Login successful!');
                               } else {
-                                // Handle login error
-                                print('Login failed: ${response.body}');
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -170,11 +119,17 @@ class _LoginPageState extends State<LoginPage> {
                                 );
                                 _usernameController.clear();
                                 _passwordController.clear();
-                                // Show error message to the user
                               }
                             } catch (error) {
                               print('Error during login: $error');
-                              // Show error message to the user
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'An error occurred. Please try again later.',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              );
                             }
                           }
                         },
@@ -230,5 +185,16 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+class AuthProvider with ChangeNotifier {
+  bool _userLoggedIn = false;
+
+  bool get userLoggedIn => _userLoggedIn;
+
+  void setUserLoggedIn(bool value) {
+    _userLoggedIn = value;
+    notifyListeners(); // Notify listeners when the user login state changes
   }
 }
