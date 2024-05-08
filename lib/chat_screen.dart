@@ -20,8 +20,7 @@ class chatScreen extends StatefulWidget {
 
 Future<String> generateResponse(String prompt) async {
   var url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCfTgntKaMcEp7hpkggDOgSsjEJyNEk6nQ');
-
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCdXlRkJFYqrOGd4Pry2W0KlrrZiMKF6GE');
   var headers = {
     "Content-Type": "application/json",
   };
@@ -91,14 +90,16 @@ class _chatScreenState extends State<chatScreen> {
             bottomRight: Radius.circular(60.0),
           ),
         ),
-        // leading: IconButton(
-        //   onPressed: () {},
-        //   icon: Icon(
-        //     Icons.menu,
-        //     size: 27,
-        //     color: Colors.white,
-        //   ),
-        // ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.add,
+              size: 27,
+              color: Colors.white,
+            ),
+          ),
+        ],
         title: Text(
           'ChatBot',
           style: TextStyle(
