@@ -168,7 +168,12 @@ class _LoginPageState extends State<LoginPage> {
                               if (response.statusCode == 200) {
                                 var responceBody = jsonDecode(response.body);
                                 var sessionId = responceBody["sessionId"];
+                                var user = responceBody["user"];
+                                int userid = user["id"];
                                 print('Session ID: $sessionId');
+
+                                print('userid : ${userid}');
+
                                 AuthService().login(sessionId);
                                 Navigator.pushNamed(context, chatScreen.id);
                                 print('Login successful!');
